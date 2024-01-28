@@ -19,10 +19,13 @@ def create_post_fake(nums=100):
     categories = Category.objects.all()    
     for i in range(nums):
         title = ' '.join(fake.word() for _ in range(randint(3, 10)))
-        content1 = ' '.join(fake.sentence() for _ in range(randint(10, 30))) 
+        content1 = ' '.join(fake.sentence() for _ in range(randint(20, 30)))
+        content2 = ' '.join(fake.sentence() for _ in range(randint(20, 30)))
+        content3 = ' '.join(fake.sentence() for _ in range(randint(20, 30)))
+        content4 = ' '.join(fake.sentence() for _ in range(randint(20, 30))) 
         author = authors[randint(0, len(authors) - 1)]
-        cat = categories[randint(0, len(categories) - 1)]
-        PostModel.objects.create(author=author, category=cat, title=title, content1=content1)
+        category = categories[randint(0, len(categories) - 1)]
+        PostModel.objects.create(author=author, category=category, title=title, content1=content1, content2=content2, content3=content3, content4=content4)
         print(f'{i+1}[*] --> Post {title} created')
     
     
