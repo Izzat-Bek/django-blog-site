@@ -53,10 +53,6 @@ class PostModel(models.Model):
         return f'{self.title}'
 
     
-    def get_absolute_url(self):
-        return f'/blog/{self.id}'
-    
-    
     def total_likes(self):
         if self.likes.count() == 0 or self.likes.count() == 1:
             return f'{self.likes.count()} like'
