@@ -13,6 +13,9 @@ import os
 path = settings.BASE_DIR / 'media' / 'images' / 'account'
 
 
+path_image = settings.BASE_DIR / 'media' / 'profile' / 'Image'
+
+
 def generate_random_image(width=500, height=500, name_image='image.JPEG'):
     color = (randint(0, 255), randint(0, 255), randint(0, 255))
     image = Image.new(mode='RGB', size=(width, height), color=color)
@@ -61,6 +64,15 @@ class Profile(models.Model):
                 os.remove(default_image)
             
         super().save(*args, **kwargs)
+    
+    
+    def delete(self, *args, **kwargs):
+        if self.image:
+            image_path = path_image / f'{self.user.username}.JPEG'
+            if os.path.exists(image_path):
+                os.remove(image_path)
+        
+        super().delete(*args, **kwargs)
         
     
     def __str__(self):
