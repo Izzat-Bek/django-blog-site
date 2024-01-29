@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from decouple import AutoConfig
 
-
+config = AutoConfig()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-8j3s_w2yysy%y*2gs1q156i-=fs$(8=*_&4f*4h5g7d7!0xa0('
+SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'django_celery_results',
     'django_email_verification',
+    'django.contrib.postgres',
 ]
 
 MIDDLEWARE = [
@@ -93,7 +94,7 @@ WSGI_APPLICATION = 'myblog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-config = AutoConfig()
+
 
 DATABASES = {
     "default": {

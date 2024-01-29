@@ -44,6 +44,7 @@ def home_view(request):
         if form.is_valid():
             query = form.cleaned_data.get('query', '').strip()
             if query:
+                context['query'] = query
                 results = PostModel.objects.annotate(
                     similarity_score=(
                         TrigramSimilarity('title', query)
