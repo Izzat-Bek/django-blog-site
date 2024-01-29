@@ -1,1 +1,1 @@
-#** Blog Site of Django **
+# Blog Site of Django
