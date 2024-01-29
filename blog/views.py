@@ -7,7 +7,7 @@ from random import randint
 from django.http import HttpRequest, JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, TrigramSimilarity
-
+import os
 
 
 def home_view(request):
@@ -36,8 +36,7 @@ def home_view(request):
     
     paginator = Paginator(post, 16)
     page_number = request.GET.get("page")
-    page = paginator.get_page(page_number)    
-    
+    page = paginator.get_page(page_number)
     
     results = None
     if 'query' in request.GET:
