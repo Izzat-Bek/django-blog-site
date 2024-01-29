@@ -44,11 +44,11 @@ def home_view(request):
         if form.is_valid():
             query = form.cleaned_data.get('query', '').strip()
             if query:
-                # results = PostModel.objects.annotate(
-                #     similarity_score=(
-                #         TrigramSimilarity('title', query)
-                #     )
-                # ).filter(similarity_score__gt=0.3).order_by('-similarity_score')
+                results = PostModel.objects.annotate(
+                    similarity_score=(
+                        TrigramSimilarity('title', query)
+                    )
+                ).filter(similarity_score__gt=0.3).order_by('-similarity_score')
             
                 if not results:
                     results = PostModel.objects.filter(
