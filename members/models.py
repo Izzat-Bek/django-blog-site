@@ -62,7 +62,6 @@ class Profile(models.Model):
             
             if os.path.abspath(default_image):
                 os.remove(default_image)
-            
         super().save(*args, **kwargs)
     
     
@@ -70,6 +69,7 @@ class Profile(models.Model):
         if self.image:
             image_path = path_image / f'{self.user.username}.JPEG'
             if os.path.exists(image_path):
+                print(f'Delette image {image_path}')
                 os.remove(image_path)
         
         super().delete(*args, **kwargs)
