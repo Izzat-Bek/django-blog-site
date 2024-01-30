@@ -5,6 +5,7 @@ from faker import Faker
 from django.conf import settings
 import string
 
+
 path = settings.BASE_DIR / 'media' / 'images' / 'account'
 path_txt = settings.BASE_DIR / 'users.txt'
 
@@ -18,8 +19,9 @@ def create_user_fake(nums=100):
             username = fake.user_name()
             last_name = fake.last_name()
             first_name = fake.first_name()
-            email = fake.email()        
-            file.write(f'username -- {username}:                password -- {password} \n')
+            email = fake.email()
+            leng = (len(username) +  12)       
+            file.write(f'[*] username -- {username}{" " * (50 - leng)}password -- {password} \n')
             User.objects.create_user(username=username, password=password, first_name=first_name, last_name=last_name, email=email)
             print(f'{i+1}[*]: -->  User {username} created')
 
