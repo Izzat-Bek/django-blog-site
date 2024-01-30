@@ -2,3 +2,6 @@
 db.sqlite3
 __pycache__
 .env
+venv
+requirements.txt
+req.txt

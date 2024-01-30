@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from faker import Faker
 from members.models import Profile
 
-
+    
 def create_category_fake(nums=10):
     fake = Faker()
     for i in range(nums):
