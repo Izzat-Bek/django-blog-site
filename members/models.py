@@ -60,7 +60,7 @@ class Profile(models.Model):
             image_io.seek(0)
             self.image.save(f'{self.user.username}.JPEG', ContentFile(image_io.read()), save=False)
             
-            if os.path.exists(default_image):
+            if os.path.abspath(default_image):
                 os.remove(default_image)
             
         super().save(*args, **kwargs)
