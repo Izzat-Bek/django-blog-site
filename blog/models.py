@@ -49,6 +49,7 @@ class PostModel(models.Model):
     date_up = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(Profile, blank=True, related_name='post_likes', verbose_name='Likes')
     
+    
     def __str__(self):
         return f'{self.title}'
 
@@ -58,7 +59,17 @@ class PostModel(models.Model):
             return f'{self.likes.count()} like'
         else:
             return f'{self.likes.count()} likes'
-        
+    
+    
+    
+    @staticmethod
+    def search_postgres(query):
+        return PostModel.objects.annotate(similarity=TrigramSimilarity('title', query)).filter(similarity__gt=0.3).order_by('-similarity')
+
+    @staticmethod
+    def search(query):
+        return PostModel.objects.filter(title__icontains=query).order_by('-date_ad')
+    
     
     class Meta:
         verbose_name = 'Post'

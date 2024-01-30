@@ -6,6 +6,7 @@ from django.conf import settings
 from .models import PostModel
 
 
+
 @shared_task
 async def send_message_to_telegram_channel(news):
     
@@ -13,6 +14,7 @@ async def send_message_to_telegram_channel(news):
     channel_id = '@izzat_ansajfsnafis'
     url = f'http://127.0.0.1:8016/article/{news.id}'
     url_ad = url.replace('_', r'\_').replace('*', r'\*').replace('[', r'\[').replace(']', r'\]')
+    url_acc = news.get_absolute_url()
     message = f'{news.title} \nPodrobno: [URL]({url_ad})'
     
     try:
