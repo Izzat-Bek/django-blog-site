@@ -79,10 +79,15 @@
     </div>
     {% if results %}
         <h1 style="text-align: center"> Found - {{ results.count }} </h1>
+    {% else %}
+        {% if query %}
+            <h1 style="text-align: center"> No Post Found - {{ query }} </h1>
+            <hr style="border: 5px solid black;">
+        {% endif %}
     {% endif %}
     <div class="body1">
-    {% if results %}
-        {% for i in results %}
+    {% if results1 %}
+        {% for i in results1 %}
             <div class="box1">
                 <img src="{{ i.image1.url }}" class="foto12">
                 <div class="com">
@@ -113,6 +118,43 @@
                 </div>
             </div>
         {% endfor %}
+        <div class="pagination" style="margin-left: 4%; margin-top: 100px; padding-bottom: 50px">
+            <span class="step-links">
+                {% comment %} 
+                    page.has_previous - проверяет есть ли предыдущая страница
+                    page.has_next - проверяет есть ли следующая страница
+                    page.number - текущая страница
+                    page.paginator.num_pages - общее количество страниц
+                    page.next_page_number - следующая страница
+                    page.previous_page_number - предыдущая страница
+                    page.paginator.num_pages - общее количество страниц
+                {% endcomment %}
+                {% if page_result.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    or
+                    <a href="?page={{page_result.previous_page_number}}">
+                        Previous
+                    </a>
+                {% endif %}
+                <span class="current">
+                    Page {{ page_result.number }} of {{ page_result.paginator.num_pages }}.
+                </span>
+                {% if page_result.has_next %}
+                    <a href="?page={{ page_result.next_page_number }}">Next</a>
+                {% endif %}
+            </span>
+        </div>
+        <br>
+        <div style="margin-top: 100px; margin-left: 4%;">
+            {% for i in paginator_result.page_range %}
+                <a href="?page={{ i }}" style="margin-right: 5px;"> {{ i }} </a>
+                {% if i == page_count_result %}
+                {% else %}
+                    <a style="margin-right: 5px;"> | <a>
+                {% endif %}
+            {% endfor %}
+        <div>
+        <br>
     {% else %}
         {% for i in posts %}
         <div class="box1">

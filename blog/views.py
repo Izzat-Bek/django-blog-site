@@ -49,6 +49,16 @@ def home_view(request):
                 
                 if not results:
                     results = PostModel.search(query=query)
+                
+                paginator_result = Paginator(results, 16)
+                page_number_result = request.GET.get("page")
+                results1 = paginator_result.get_page(page_number_result)
+                
+                context['results'] = results
+                context['results1'] = results1
+                context['page_result'] = results1
+                context['page_count_result'] = paginator.num_pages
+                context['paginator_result'] = paginator_result
     
     else:
         form = SearchForm()
@@ -56,7 +66,6 @@ def home_view(request):
     
     # print(results)
     context['form'] = form
-    context['results'] = results
     context['page'] = page
     context['page_count'] = paginator.num_pages
     context['posts'] = page
