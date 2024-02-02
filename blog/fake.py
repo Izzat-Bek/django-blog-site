@@ -1,6 +1,5 @@
 from .models import PostModel, Category
 from random import randint
-from django.contrib.auth.models import User
 from faker import Faker
 from members.models import Profile
 
@@ -25,8 +24,9 @@ def create_post_fake(nums=100):
         content4 = ' '.join(fake.sentence() for _ in range(randint(20, 30))) 
         author = authors[randint(0, len(authors) - 1)]
         category = categories[randint(0, len(categories) - 1)]
+        print(category)
         PostModel.objects.create(author=author, category=category, title=title, content1=content1, content2=content2, content3=content3, content4=content4)
-        print(f'{i+1}[*] --> Post {title} created')
+        # print(f'{i+1}[*] --> Post {title} created')
     
     
 def add_likes_to_post(id_post):

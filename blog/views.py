@@ -3,14 +3,17 @@ from .models import PostModel, CommentModel, StarModel
 from django.contrib.auth.models import User
 from .forms import AddCommentForm, AddCommentFormUsername, SearchForm, AddPost
 from members.models import Profile
-from random import randint
-from django.http import HttpRequest, JsonResponse
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, TrigramSimilarity
-import os
+from django.http import JsonResponse
+from django.core.paginator import Paginator
+from django.contrib.sites.shortcuts import get_current_site
+
+
+def url_address(request):
+    return f'http://{get_current_site(request).domain}:{request.META["SERVER_PORT"]}'
 
 
 def home_view(request):
+    URL_ADD = url_address(request)
     post = PostModel.objects.all().order_by('-date_ad')
     user_profile = True
     profile = None
@@ -64,30 +67,75 @@ def home_view(request):
         form = SearchForm()
     
     
-    # print(results)
     context['form'] = form
     context['page'] = page
     context['page_count'] = paginator.num_pages
     context['posts'] = page
     context['paginator'] = paginator
-        
     return render(request, 'blog/home.html', context)
 
 
 
 def category_view(request, id_cat):
     post = PostModel.objects.filter(category=id_cat).order_by('-date_ad')
-    user = None
+    user_profile = True
     profile = None
+    liked = None
     if request.user.is_authenticated:
         user = User.objects.get(id=request.user.id)
-        profile = Profile.objects.get(user=user)
+        if Profile.objects.filter(user=user).exists():
+            profile = Profile.objects.get(user=user)
+            user_profile = False
+            post1 = PostModel.objects.filter(likes=profile)
+            liked = [i.id for i in post1]
+        else:
+            user_profile = True
+
+    else:
+        user_profile = True
     context = {
         'post': post,
+        'user_profile': user_profile,
         'profile': profile,
-    }    
+        'liked': liked,
+    }
+    
+    paginator = Paginator(post, 16)
+    page_number = request.GET.get("page")
+    page = paginator.get_page(page_number)
+    
+    results = None
+    if 'query' in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data.get('query', '').strip()
+            if query:
+                context['query'] = query
+                results = PostModel.search_postgres(query=query)
+                
+                if not results:
+                    results = PostModel.search(query=query)
+                
+                paginator_result = Paginator(results, 16)
+                page_number_result = request.GET.get("page")
+                results1 = paginator_result.get_page(page_number_result)
+                
+                context['results'] = results
+                context['results1'] = results1
+                context['page_result'] = results1
+                context['page_count_result'] = paginator.num_pages
+                context['paginator_result'] = paginator_result
+    
+    else:
+        form = SearchForm()
+    
+    
+    context['form'] = form
+    context['page'] = page
+    context['page_count'] = paginator.num_pages
+    context['posts'] = page
+    context['paginator'] = paginator
     return render(request, 'blog/home.html', context)
-
 
 def article_detail(request, id_post):
     post = PostModel.objects.get(id=id_post)
@@ -116,6 +164,7 @@ def article_detail(request, id_post):
     comment = CommentModel.objects.filter(post=id_post)
     rating = list(range(1, rat+ 1))
     unrating = list(range(rat + 1, 6))
+    print(post.get_absolute_url())
     context = {
         'post': post,
         'rating': rating,

@@ -155,6 +155,7 @@ STATICFILES = (
 
 
 # Default primary key field type
+
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -167,11 +168,6 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
 
-# config telegram
-TELEGRAM = {
-    'bot_token': '6634816062:AAGjshTkVrQ7tMtMNfqCBg-SprNKjh6SGfA',
-    'channel_name': '@izzat_ansajfsnafis'
-}
 
 
 # celery

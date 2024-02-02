@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from members.models import Profile
 from django.contrib.postgres.search import TrigramSimilarity
+from django.urls import reverse
 
 
 
@@ -59,6 +60,10 @@ class PostModel(models.Model):
             return f'{self.likes.count()} like'
         else:
             return f'{self.likes.count()} likes'
+    
+    
+    def get_absolute_url(self):
+        return reverse('article', kwargs={'id_post': self.id})
     
     
     
