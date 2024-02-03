@@ -65,7 +65,7 @@ def base_home(request, id_cat):
                 context['results'] = results
                 context['results1'] = results1
                 context['page_result'] = results1
-                context['page_count_result'] = paginator.num_pages
+                context['page_count_result'] = paginator_result.num_pages
                 context['paginator_result'] = paginator_result
     
     else:
@@ -84,13 +84,11 @@ def base_home(request, id_cat):
 def home_view(request):
     URL_ADD = url_address(request)
     context = base_home(request, None)
-    print(context)
     return render(request, 'blog/home.html', context)
 
     
 def category_view(request, id_cat):
     context = base_home(request, id_cat)
-    print(context)
     return render(request, 'blog/home.html', context)
 
 
