@@ -23,4 +23,3 @@ async def send_message_to_telegram_channel(post):
     except Exception as e:
         print(f'{e}')
         logging.error(e)
-
