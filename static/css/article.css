@@ -174,16 +174,17 @@ a{
 }
 .starbax{
     display: flex;
+    border: 1px solid black;
 }
 .liked{
     margin-left: 500px;
 }
 
 .liked img{
-    width: 25px;
-    height: 25px;
+    width: 30px;
+    height: 30px;
 }
 .liked1{
     margin-left: 20px;
-
 }
+

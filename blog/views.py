@@ -6,6 +6,8 @@ from members.models import Profile
 from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.contrib.sites.shortcuts import get_current_site
+from django.contrib import messages
+
 
 
 def url_address(request):
@@ -98,18 +100,45 @@ def article_detail(request, id_post):
     user_acc = None
     profile = None
     liked = False
+    form_user = None
+    form = None
     if request.user.is_authenticated:
         user_acc = User.objects.get(id=request.user.id)
         profile = Profile.objects.get(user=user_acc)
         
+        if not post.view_profile.filter(id=profile.id).exists():
+            post.view_profile.add(profile)
+
         if post.likes.filter(id=profile.id).exists():
             liked = True
         
+        if request.method == 'POST':
+            form_user = AddCommentFormUsername(request.POST)
+            if form_user.is_valid():
+                username = User.objects.get(id=request.user.id).username
+                comment= form_user.cleaned_data['comment']
+                comment1 = CommentModel.objects.create(post=post, username=username, comment=comment)
+                comment1.save()
+        else:
+            form_user = AddCommentFormUsername()
+
+    else:
+        if request.method == 'POST':
+            form = AddCommentForm(request.POST)
+            if form.is_valid():
+                username = form.cleaned_data['username']
+                comment = form.cleaned_data['comment']
+                comment1 = CommentModel.objects.create(post=post, comment=comment, username=username)
+                comment1.save()
+        else:
+            form = AddCommentForm()
+    
     
     count = star.count()
     ball = sum([i.star_num for i in star])
     
     rat = 0
+    rat1 = 0
     if count == 0:    
         rat = 0
     
@@ -119,7 +148,6 @@ def article_detail(request, id_post):
     comment = CommentModel.objects.filter(post=id_post)
     rating = list(range(1, rat+ 1))
     unrating = list(range(rat + 1, 6))
-    print(post.get_absolute_url())
     context = {
         'post': post,
         'rating': rating,
@@ -129,7 +157,10 @@ def article_detail(request, id_post):
         'liked': liked,
         'unrating': unrating,
         'rat': rat,
+        'rat1': rat1,
         'profile': profile,
+        'form': form,
+        'form_user': form_user,
     }    
     return render(request, 'blog/article.html', context)
 
@@ -159,6 +190,10 @@ def comment_view(request, id_post, id_user):
             comment= form.cleaned_data['comment']
             comment1 = CommentModel.objects.create(post=post, username=username, comment=comment)
             comment1.save()
+            messages.success(request, 'Ваш комментарий успешно добавлен')
+            return redirect('article', id_post=post.id)
+        else:
+            messages.error(request, 'Ваш комментарий не добавлен')
             return redirect('article', id_post=post.id)
     else:
         form = AddCommentFormUsername()

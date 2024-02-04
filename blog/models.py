@@ -49,7 +49,7 @@ class PostModel(models.Model):
     date_ad = models.DateTimeField(auto_now_add=True)
     date_up = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(Profile, blank=True, related_name='post_likes', verbose_name='Likes')
-    
+    view_profile = models.ManyToManyField(Profile, blank=True, related_name='post_view_user', verbose_name='View')
     
     def __str__(self):
         return f'{self.title}'
@@ -60,6 +60,13 @@ class PostModel(models.Model):
             return f'{self.likes.count()} like'
         else:
             return f'{self.likes.count()} likes'
+    
+    
+    def total_view(self):
+        if self.view_profile.count() == 0 or self.view_profile.count() == 1:
+            return f'{self.view_profile.count()} view'
+        else:
+            return f'{self.view_profile.count()} views'
     
     
     def get_absolute_url(self):

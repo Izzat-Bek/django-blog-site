@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'django_celery_results',
     'django_email_verification',
     'django.contrib.postgres',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

@@ -1,6 +1,5 @@
 from .models import CommentModel, PostModel
 from django import forms
-from ckeditor.widgets import CKEditorWidget
 
 
 class AddCommentFormUsername(forms.ModelForm):
@@ -9,7 +8,7 @@ class AddCommentFormUsername(forms.ModelForm):
         fields = ('comment',)
 
         widgets = {
-            'content': forms.Textarea(attrs={'class': 'form-control'}),
+            'content': forms.TextInput(attrs={'class': 'form-control'}),
         }
         
         
@@ -19,7 +18,7 @@ class AddCommentForm(forms.ModelForm):
         fields = ('username' ,'comment',)
         
         widgets = {
-            'comment': forms.Textarea(attrs={'class': 'form-control'}),
+            'comment': forms.TextInput(attrs={'class': 'form-control'}),
             'username': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
