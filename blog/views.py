@@ -77,7 +77,6 @@ def base_home(request, id_cat):
     context['form'] = form
     context['page'] = page
     context['page_count'] = paginator.num_pages
-    context['posts'] = page
     context['paginator'] = paginator
     return context
 

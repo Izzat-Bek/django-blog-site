@@ -156,7 +156,7 @@
         <div>
         <br>
     {% else %}
-        {% for i in posts %}
+        {% for i in page %}
         <div class="box1">
             <a href="{% url 'profile' i.author.id %}"> Author by - {{ i.author }} </a>
             <img src="{{ i.image1.url }}" class="foto12">

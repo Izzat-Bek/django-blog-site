@@ -174,7 +174,6 @@ a{
 }
 .starbax{
     display: flex;
-    border: 1px solid black;
 }
 .liked{
     margin-left: 500px;
