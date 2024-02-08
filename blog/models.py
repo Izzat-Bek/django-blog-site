@@ -91,7 +91,7 @@ class PostModel(models.Model):
 class CommentModel(models.Model):
     post = models.ForeignKey(PostModel, on_delete=models.CASCADE)
     username = models.CharField(max_length=100)
-    comment = RichTextField(blank=True, null=True, verbose_name='Comment')
+    comment = models.CharField(blank=True, null=True, verbose_name='Comment', max_length=1000)
     date_ad = models.DateTimeField(auto_now_add=True)
 
 

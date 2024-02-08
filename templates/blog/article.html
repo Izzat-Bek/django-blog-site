@@ -66,7 +66,10 @@
             <a href="{% url 'login' %}"> Login </a>
         </div>
         {% endif %}
-        <div class="menu-bar1">
+        <div class="menu-bar">
+            <a href="#"> Setting </a>
+        </div>
+        <div class="menu-bar">
             {% if user.is_authenticated %}
                 <a href=""> {{ user.username }} </a>
             {% else %}
@@ -209,8 +212,7 @@
                 <div class="mb-3 ">
                     <form method="post">
                         {% csrf_token %}
-                        {{ form }}
-                        {{ form|crispy }}
+                        {{ form | crispy }}
                         <button class="btn btn-light"> Add </button>
                     </form>
                 </div>
