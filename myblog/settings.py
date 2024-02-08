@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'django_email_verification',
     'django.contrib.postgres',
     'rest_framework',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -98,13 +99,23 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'myblog.wsgi.application'
+ASGI_APPLICATION = 'myblog.asgi.application'
+
+
+# setting channels
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        }
+    }
+}
+
 
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
