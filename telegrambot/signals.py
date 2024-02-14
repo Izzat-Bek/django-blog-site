@@ -5,7 +5,9 @@ from .models import TelegramBot
 
 @receiver(post_save, sender=TelegramBot)
 def check_telegram_bot(sender, instance, created, **kwargs):
-    if created:
-        instance.check_telegram_token()
-        instance.get_chat_id()
+    if created or not instance.error_message:
+        if instance.check_telegram_token() and instance.get_chat_id():
+            instance.save()
+            
+    
         

@@ -19,7 +19,7 @@ async def send_message_to_telegram_channel(post):
         message = f'{post_title} \nPodrobno: [URL]({url_ad})'
         try:
             await bot.send_message(channel_id, message, parse_mode=ParseMode.MARKDOWN)
-            print(f'Post {post_title} sent to telegram chanell as {channel_id}')
+            print(f'\n\nPost {post_title} sent to telegram chanell as {channel_id}\n\n')
         except Exception as e:
             print(f'{e}')
             logging.error(e)

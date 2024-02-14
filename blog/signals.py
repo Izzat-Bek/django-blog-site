@@ -1,6 +1,6 @@
 from .models import PostModel
 from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from .task import send_message_to_telegram_channel as send_post_task
 from asyncio import run
 from telegrambot.models import TelegramBot
@@ -25,3 +25,9 @@ def send_post_to_telegram_channel(sender, instance, created, **kwargs):
             'url_address': instance.get_absolute_url(),
         }
         run(send_post_task(post_data))
+
+
+@receiver(post_delete, sender=PostModel)
+def delete_post(sender, instance, **kwargs):
+    print(f'[*]{instance.id}  Post {instance.title} deleted from DB')
+    
