@@ -77,7 +77,9 @@
         <form method="GET" id="search-form">
           {% csrf_token %}
           {{ form | crispy }}
-          <span> times - {{ times }}s </span> <br>
+          {% if times %}
+            <span> times - {{ times }}s </span> <br>
+          {% endif %}
           <button class="btn btn-primary" type="submit">Search</button>
         </form>
     </div>

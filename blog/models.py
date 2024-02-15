@@ -118,7 +118,7 @@ class StarModel(models.Model):
     star_num = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
     
     def __str__(self):
-        return f'{self.username}'
+        return f'{self.profile.user}'
 
     class Meta:
         verbose_name = 'Star'
