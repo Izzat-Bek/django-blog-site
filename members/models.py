@@ -48,8 +48,7 @@ class Profile(models.Model):
     url_github = models.CharField(blank=True, max_length=300, null=True, verbose_name='URL to github')
     likes = models.ManyToManyField('self', symmetrical=False, blank=True, verbose_name='Likes',
                                    related_name='liked_profiles')
-    follow = models.ManyToManyField('self', symmetrical=False, blank=True, null=True, verbose_name='Followers',
-                                    related_name='Followers_profile')
+    follow = models.ManyToManyField('self', blank=True, verbose_name='Followers',)
     
     def save(self, *args, **kwargs):
         if not self.image:

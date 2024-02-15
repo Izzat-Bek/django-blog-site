@@ -7,7 +7,7 @@ from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages
-
+from time import time
 
 
 def url_address(request):
@@ -54,12 +54,15 @@ def base_home(request, id_cat):
         if form.is_valid():
             query = form.cleaned_data.get('query', '').strip()
             if query:
+                time1 = time()
                 context['query'] = query
                 results = PostModel.search_postgres(query=query)
                 
                 if not results:
                     results = PostModel.search(query=query)
-                
+                time2 = time()
+                times = round(time2 - time1, 2)
+                context['times'] = times
                 paginator_result = Paginator(results, 16)
                 page_number_result = request.GET.get("page")
                 results1 = paginator_result.get_page(page_number_result)

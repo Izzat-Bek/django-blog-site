@@ -77,6 +77,7 @@
         <form method="GET" id="search-form">
           {% csrf_token %}
           {{ form | crispy }}
+          <span> times - {{ times }}s </span> <br>
           <button class="btn btn-primary" type="submit">Search</button>
         </form>
     </div>
@@ -133,9 +134,9 @@
                     page.paginator.num_pages - общее количество страниц
                 {% endcomment %}
                 {% if page_result.has_previous %}
-                    <a href="result?page=1">&laquo; first</a>
+                    <a href="?page=1">&laquo; first</a>
                     or
-                    <a href="result?page={{page_result.previous_page_number}}">
+                    <a href="?page={{page_result.previous_page_number}}">
                         Previous
                     </a>
                 {% endif %}
@@ -143,14 +144,14 @@
                     Page {{ page_result.number }} of {{ page_result.paginator.num_pages }}.
                 </span>
                 {% if page_result.has_next %}
-                    <a href="result?page={{ page_result.next_page_number }}">Next</a>
+                    <a href="?page={{ page_result.next_page_number }}">Next</a>
                 {% endif %}
             </span>
         </div>
         <br>
         <div style="margin-top: 100px; margin-left: 4%;">
             {% for i in paginator_result.page_range %}
-                <a href="result?page={{ i }}" style="margin-right: 5px;"> {{ i }} </a>
+                <a href="?page={{ i }}" style="margin-right: 5px;"> {{ i }} </a>
                 {% if i == page_count_result %}
                 {% else %}
                     <a style="margin-right: 5px;"> | <a>

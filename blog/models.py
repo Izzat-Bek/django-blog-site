@@ -49,7 +49,7 @@ class PostModel(models.Model):
     date_ad = models.DateTimeField(auto_now_add=True)
     date_up = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(Profile, blank=True, related_name='post_likes', verbose_name='Likes')
-    view_profile = models.ManyToManyField(Profile, blank=True, related_name='post_view_user', verbose_name='View')
+    view_profile = models.ManyToManyField(Profile, blank=True, symmetrical=False, related_name='post_view_user', verbose_name='View')
     
     def __str__(self):
         return f'{self.title}'
@@ -82,6 +82,15 @@ class PostModel(models.Model):
     def search(query):
         return PostModel.objects.filter(title__icontains=query).order_by('-date_ad')
     
+    
+    @staticmethod
+    def sear_for_split(query):
+        words = query.split()
+        result = set()
+        for word in words:
+            result.add(PostModel.objects.filter(title__icontains=word).order_by('-date_ad'))
+        return result
+        
     
     class Meta:
         verbose_name = 'Post'
