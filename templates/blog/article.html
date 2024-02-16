@@ -137,26 +137,26 @@
         {% endif %}
         <br>
         <div class="rating">
-            <h1>
+            <h1 id="rating11">
                 rating - {{ rat1 }} |
             </h1>
-            <h1>
+            <h1 id="overall">
                 overall rating - {{ ball }} |
             </h1>
-            <h1>
+            <h1 id="count11">
                 count of people - {{ count }}
             </h1>
             <p>
-                {{ post.created_at }}
+                {{ post.date_ad }}
             </p>
         </div>
         <div class="starbax" style="width: 1500px">
             {% if user.is_authenticated %}
-                {% for i in rating%}
-                    <a href="{% url 'add_star' post.id i %}"> <span class="fa fa-star checked"></span> </a>
+                {% for i in rating %}
+                    <a href="#" onclick="addStar('{{ post.id }}', '{{ i }}')"> <span class="fa fa-star checked"></span> </a>
                 {% endfor %}
                 {% for i in unrating %}
-                    <a href="{% url 'add_star' post.id i %}"> <span class="fa fa-star"></span> </a>
+                    <a href="#" onclick="addStar('{{ post.id }}', '{{ i }}')"> <span class="fa fa-star"></span> </a>
                 {% endfor %}
             {% else %}
                 {% for i in rating %}
@@ -264,7 +264,39 @@
             });
         });
     </script>
-    
+    <script>
+        var csrf_token = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        function addStar(postId, ball) {
+            $.ajax({
+                type: 'POST',
+                url: '/add_star/' + postId + '/' + ball + '/',
+                data: {
+                    csrfmiddlewaretoken: csrf_token
+                },
+                success: function(data) {
+                    var rating = data.rating
+                    var rat1 = data.rat1
+                    var count = data.count
+                    var ball = data.ball
+                    var rat = data.rat
+                    var unrating = data.unrating
+
+                    for (var i = 1, i <= rating; i++) {
+                        $('.stars').append('<span class="fa fa-star checked"></span>');
+                    }
+
+                    for (var j = 1; j <= unrating; j++) {
+                        $('.stars').append('<span class="fa fa-star"></span>');
+                    }
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    console.error('Ошибка:', errorThrown);
+                }
+            });
+        }
+        
+    </script>
 </body>
     <style>
         a{
