@@ -113,16 +113,12 @@ def article_detail(request, id_post):
 
         if post.likes.filter(id=profile.id).exists():
             liked = True        
-    
-    
     count = star.count()
     ball = sum([i.star_num for i in star])
-    
     rat = 0
     rat1 = 0
     if count == 0:    
         rat = 0
-    
     else:
         rat1 = round(ball/count, 1)
         rat = round(ball/count)
@@ -142,7 +138,9 @@ def article_detail(request, id_post):
         'profile': profile,
         'form': form,
         'form_user': form_user,
-    }    
+    } 
+    form_user = AddCommentFormUsername()
+    context['form_user'] = form_user   
     return render(request, 'blog/article.html', context)
 
 
@@ -163,29 +161,17 @@ def add_star(request, id_post, ball):
     return redirect('article', id_post=id_post)
 
 
-def comment_view(request, id_post, id_user):
-    from crispy_forms.utils import render_crispy_form
-    
-    
-    post = PostModel.objects.get(id=id_post)
-    messages = None
-    if request.method == 'POST' and  request.is_ajax():
-        form = AddCommentFormUsername(request.POST)
-        if form.is_valid():
-            username = User.objects.get(id=id_user).username
-            comment= form.cleaned_data['comment']
-            comment1 = CommentModel.objects.create(post=post, username=username, comment=comment)
-            comment1.save()
-            message = 'Ваш комментарий успешно добавлен'
-            return JsonResponse({'message': message, 'success': True})
+def comment_view(request):
+    if request.method == 'POST':
+        form_comment = AddCommentForm(request.POST)
+        if form_comment.is_valid():
+            comment = form_comment.save()
+            return JsonResponse({'success': True, 'message': 'Comment added successfully'})
         else:
-            messages = 'Ваш комментарий не добавлен'
-            return JsonResponse({'message': messages, 'success': False})
+            return JsonResponse({'success': False, 'message': form_comment.errors})
     else:
-        form = AddCommentFormUsername()
-        form_html = render_crispy_form(form)
-    return JsonResponse({'form_html': form_html, 'post': post})
-
+        return JsonResponse({'success': False, 'message': 'Invalid request'})
+            
 
 def comment_username_view(request, id_post):
     post = PostModel.objects.get(id=id_post)
