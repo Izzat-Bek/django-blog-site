@@ -151,7 +151,7 @@ def add_star(request, id_post, ball):
     post = PostModel.objects.get(id=id_post)
     user = User.objects.get(id=request.user.id)
     profile = Profile.objects.get(user=user)
-    
+
     if StarModel.objects.filter(post=post, profile=profile).exists():
         star = StarModel.objects.get(post=post, profile=profile)
         star.star_num = ball
@@ -159,6 +159,7 @@ def add_star(request, id_post, ball):
     else:
         star = StarModel.objects.create(post=post, profile=profile, star_num=ball)
         star.save()
+    
     return redirect('article', id_post=id_post)
 
 
