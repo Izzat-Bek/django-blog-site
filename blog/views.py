@@ -165,7 +165,16 @@ def comment_view(request):
     if request.method == 'POST':
         form_comment = AddCommentForm(request.POST)
         if form_comment.is_valid():
-            comment = form_comment.save()
+            comment = form_comment.save(commit=False)
+            user = User.objects.get(id=request.user.id)
+            profile = Profile.objects.get(user=user)
+            post = form_comment.cleaned_data['post']
+            comment = form_comment.cleaned_data['comment']
+            CommentModel.objects.create(
+                post=post,
+                username=profile,
+                comment=comment,
+            )
             return JsonResponse({'success': True, 'message': 'Comment added successfully'})
         else:
             return JsonResponse({'success': False, 'message': form_comment.errors})
