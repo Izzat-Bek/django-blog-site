@@ -228,7 +228,7 @@ def delete_post_view(request, id_post):
 
 def contact_view(request):
     
-    profiles = Profile.objects.all()
+    profiles = Profile.objects.select_related('user').order_by('user__username')
     context = {
         'profiles': profiles,
     }

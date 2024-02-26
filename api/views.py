@@ -2,12 +2,14 @@ from django.shortcuts import render
 from rest_framework import generics
 from blog.models import PostModel, Category, StarModel as Star
 from .serializers import (PostSerializer, PostArticleSerializer, ProfilesSerializer, 
-                          ProfileArticleSerializer, CategorySerializer, StarPostSerializer)
+                          ProfileArticleSerializer, CategorySerializer, StarPostSerializer,
+                          TelegrammBotSerializer)
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.forms import model_to_dict
 from rest_framework.parsers import MultiPartParser
 from members.models import Profile, StarModel
+from telegrambot.models import TelegramBot
 
 
     
@@ -82,3 +84,11 @@ class StarPostAPIView(APIView):
         serializers = StarPostSerializer(star, many=True)
         return Response(serializers.data)
 
+
+class TelegrammBotAPIView(APIView):
+    
+    def get(self, request):
+        bot = TelegramBot.objects.all()
+        serializers = TelegrammBotSerializer(bot, many=True)
+        return Response(serializers.data)
+    

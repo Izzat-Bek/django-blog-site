@@ -2,6 +2,7 @@ from blog.models import PostModel, Category, StarModel
 from django.contrib.auth.models import User
 from members.models import Profile, StarModel as Star
 from rest_framework import serializers
+from telegrambot.models import TelegramBot
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -55,4 +56,11 @@ class StarPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = StarModel
         fields = ('id', 'post', 'profile', 'star_num')
-        
+
+
+class TelegrammBotSerializer(serializers.ModelSerializer):
+    username = ProfilesSerializer()
+    class Meta:
+        model = TelegramBot
+        fields = '__all__'
+    
