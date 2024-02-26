@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics
-from blog.models import PostModel
-from .serializers import PostSerializer, PostArticleSerializer, ProfilesSerializer, ProfileArticleSerializer
+from blog.models import PostModel, Category
+from .serializers import PostSerializer, PostArticleSerializer, ProfilesSerializer, ProfileArticleSerializer, CategorySerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.forms import model_to_dict
@@ -35,8 +35,6 @@ class PostModelAPIView(APIView):
 
 
 class PostArticleAPIView(APIView):
-    
-    
     def get(self, request, post_id):
         try:
             post = PostModel.objects.get(id=post_id)
@@ -63,3 +61,19 @@ class ProfilesArticleAPIView(APIView):
         except Profile.DoesNotExist:
             return Response({'error': 'Profile not found'}, status=404)
         
+
+class CategoryAPIView(APIView):
+    def get(self, request):
+        category = Category.objects.all()
+        serializers = CategorySerializer(category, many=True)
+        return Response(serializers.data)
+    
+    
+
+class CategoryArticleAPIView(APIView):
+    
+    def get(self, requests, id_cat):
+        category = Category.objects.get(id=id_cat)
+        posts = PostModel.objects.filter(category=category)
+        serializers = PostSerializer(posts, many=True)
+        return Response(serializers.data)
