@@ -3,7 +3,7 @@ from rest_framework import generics
 from blog.models import PostModel, Category, StarModel as Star
 from .serializers import (PostSerializer, PostArticleSerializer, ProfilesSerializer, 
                           ProfileArticleSerializer, CategorySerializer, StarPostSerializer,
-                          TelegrammBotSerializer)
+                          TelegrammBotSerializer, StarProfileSerializers)
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.forms import model_to_dict
@@ -85,10 +85,19 @@ class StarPostAPIView(APIView):
         return Response(serializers.data)
 
 
+class StarProfileAPIView(APIView):
+    
+    def get(self, request):
+        star = StarModel.objects.all()
+        serializers = StarProfileSerializers(star, many=True)
+        return Response(serializers.data)   
+
+
 class TelegrammBotAPIView(APIView):
     
     def get(self, request):
         bot = TelegramBot.objects.all()
         serializers = TelegrammBotSerializer(bot, many=True)
         return Response(serializers.data)
+    
     

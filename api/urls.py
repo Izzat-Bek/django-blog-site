@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (PostModelAPIView, PostArticleAPIView, ProfilesAPIView, 
                     ProfilesArticleAPIView, CategoryAPIView, CategoryArticleAPIView,
-                    StarPostAPIView, TelegrammBotAPIView)
+                    StarPostAPIView, TelegrammBotAPIView, StarProfileAPIView)
 
 urlpatterns = [
     path('posts/', PostModelAPIView.as_view()),
@@ -12,5 +12,6 @@ urlpatterns = [
     path('category/<int:id_cat>/article/', CategoryArticleAPIView.as_view()),
     path('star/posts/', StarPostAPIView.as_view()),
     path('telegram/bots/', TelegrammBotAPIView.as_view()),
+    path('star/profiles/', StarProfileAPIView.as_view()),
 ]
 

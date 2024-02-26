@@ -52,7 +52,7 @@ class PostArticleSerializer(serializers.ModelSerializer):
 
 class StarPostSerializer(serializers.ModelSerializer):
     post = PostsStarSerializers()
-    profile = ProfileArticleSerializer()
+    profile = ProfilesSerializer()
     class Meta:
         model = StarModel
         fields = ('id', 'post', 'profile', 'star_num')
@@ -64,3 +64,11 @@ class TelegrammBotSerializer(serializers.ModelSerializer):
         model = TelegramBot
         fields = '__all__'
     
+
+class StarProfileSerializers(serializers.ModelSerializer):
+    user_acc = ProfilesSerializer()
+    user = ProfilesSerializer()
+    
+    class Meta:
+        model = Star
+        fields = '__all__'
