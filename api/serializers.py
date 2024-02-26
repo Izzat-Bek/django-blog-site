@@ -1,6 +1,6 @@
-from blog.models import PostModel, Category
+from blog.models import PostModel, Category, StarModel
 from django.contrib.auth.models import User
-from members.models import Profile
+from members.models import Profile, StarModel as Star
 from rest_framework import serializers
 
 
@@ -9,6 +9,13 @@ class PostSerializer(serializers.ModelSerializer):
         model = PostModel
         fields = ('id', 'title', 'author_id', 'likes', 'view_profile')
 
+
+class PostsStarSerializers(serializers.ModelSerializer):
+    
+    class Meta:
+        model = PostModel
+        fields = ('id', 'title')
+        
 
 class ProfilesSerializer(serializers.ModelSerializer):
     class Meta:
@@ -42,4 +49,10 @@ class PostArticleSerializer(serializers.ModelSerializer):
         model = PostModel
         fields = '__all__'
 
-
+class StarPostSerializer(serializers.ModelSerializer):
+    post = PostsStarSerializers()
+    profile = ProfileArticleSerializer()
+    class Meta:
+        model = StarModel
+        fields = ('id', 'post', 'profile', 'star_num')
+        

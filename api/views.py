@@ -1,19 +1,15 @@
 from django.shortcuts import render
 from rest_framework import generics
-from blog.models import PostModel, Category
-from .serializers import PostSerializer, PostArticleSerializer, ProfilesSerializer, ProfileArticleSerializer, CategorySerializer
+from blog.models import PostModel, Category, StarModel as Star
+from .serializers import (PostSerializer, PostArticleSerializer, ProfilesSerializer, 
+                          ProfileArticleSerializer, CategorySerializer, StarPostSerializer)
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.forms import model_to_dict
 from rest_framework.parsers import MultiPartParser
-from members.models import Profile
+from members.models import Profile, StarModel
 
 
-
-# class PostModelAPIView(generics.ListCreateAPIView):
-#     queryset = PostModel.objects.all().order_by('-date_ad')[1:3]
-#     serializer_class = PostSerializer
-    
     
 class PostModelAPIView(APIView):
     
@@ -77,3 +73,12 @@ class CategoryArticleAPIView(APIView):
         posts = PostModel.objects.filter(category=category)
         serializers = PostSerializer(posts, many=True)
         return Response(serializers.data)
+    
+
+class StarPostAPIView(APIView):
+    
+    def get(self, request):
+        star = Star.objects.all()
+        serializers = StarPostSerializer(star, many=True)
+        return Response(serializers.data)
+
