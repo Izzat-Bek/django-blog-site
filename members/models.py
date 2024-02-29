@@ -48,7 +48,7 @@ class Profile(models.Model):
     url_github = models.CharField(blank=True, max_length=300, null=True, verbose_name='URL to github')
     likes = models.ManyToManyField('self', symmetrical=False, blank=True, verbose_name='Likes',
                                    related_name='liked_profiles')
-    follow = models.ManyToManyField('self', blank=True, verbose_name='Followers',)
+    follow = models.ManyToManyField('self', symmetrical=False, blank=True, verbose_name='Followers',)
     
     def save(self, *args, **kwargs):
         if not self.image:
@@ -79,6 +79,7 @@ class Profile(models.Model):
     class Meta:
         verbose_name = 'Profile'
         verbose_name_plural = 'Profiles'
+        ordering = ['user__username']
 
     def total_likes(self):
         return self.likes.count()

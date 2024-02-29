@@ -34,7 +34,7 @@ class ProfileArticleSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
         model = Profile
-        fields = ('bio', 'user')
+        fields = '__all__'
 
 
 class CategorySerializer(serializers.ModelSerializer):
