@@ -10,6 +10,8 @@ from django.forms import model_to_dict
 from rest_framework.parsers import MultiPartParser
 from members.models import Profile, StarModel
 from telegrambot.models import TelegramBot
+from django.contrib.auth.models import User
+from rest_framework import status
 
 
     
@@ -26,11 +28,16 @@ class PostModelAPIView(APIView):
     def post(self, request):
         serializer = PostSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            if request.user.is_authenticated:
+                user = User.objects.get(id=request.user.id)
+                profile = Profile.objects.get(user=user)
+                serializer.save(author=profile)
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
     
 
+
+    
 
 class PostArticleAPIView(APIView):
     def get(self, request, post_id):
@@ -41,6 +48,20 @@ class PostArticleAPIView(APIView):
         except PostModel.DoesNotExist:
             return Response({'error': 'Post not found'}, status=404)
         
+    
+    def delete(self, request, post_id):
+        try:
+            user = User.objects.get(id=request.user.id)
+            profile = Profile.objects.get(user=user)
+            post = PostModel.objects.get(id=post_id)
+            if post.author == profile or user.is_superuser:
+                post.delete()
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            else:
+                return Response(status=status.HTTP_403_FORBIDDEN)
+        except PostModel.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    
 
 class ProfilesAPIView(APIView):
     def get(self, request):

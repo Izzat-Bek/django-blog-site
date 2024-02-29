@@ -8,7 +8,7 @@ from telegrambot.models import TelegramBot
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostModel
-        fields = ('id', 'title', 'author_id', 'likes', 'view_profile')
+        fields = ('id', 'title', 'image1', 'author_id', 'likes', 'view_profile')
 
 
 class PostsStarSerializers(serializers.ModelSerializer):
